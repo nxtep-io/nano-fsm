@@ -34,7 +34,6 @@
     ]
   },
   "dependencies": {
-    "nano-fsm": "nxtep-io/nano-fsm#master",
     "ts-framework-common": "nxtep-io/ts-framework-common#v2"
   },
   "devDependencies": {

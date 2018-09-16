@@ -2698,12 +2698,6 @@ nan@^2.9.2:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
 
-nano-fsm@nxtep-io/nano-fsm#master:
-  version "0.0.1"
-  resolved "git+ssh://git@github.com/nxtep-io/nano-fsm.git#5d70a6f48601e9407e134596492b39b709636982"
-  dependencies:
-    ts-framework-common nxtep-io/ts-framework-common#v2
-
 nanomatch@^1.2.9:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.13.tgz#b87a8aa4fc0de8fe6be88895b38983ff265bd119"

@@ -15,7 +15,7 @@ npm install "github:nxtep-io/nano-fsm#master";
 
 ## Example: A simple Gate fsm
 
-Let´s define a Gate, with a simple unlocking password and 3 states: `opened`, `closed` and `locked`.
+Let's define a Gate, with a simple unlocking password and 3 states: `opened`, `closed` and `locked`.
 
 ```typescript
 /**
