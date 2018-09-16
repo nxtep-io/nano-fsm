@@ -1,0 +1,18 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint-no-circular-imports",
+    "tslint-config-airbnb",
+    "tslint-config-prettier"
+  ],
+  "jsRules": {},
+  "rules": {
+    "import-name": false,
+    "max-line-length": [true, 120],
+    "no-var-self": false,
+    "ordered-imports": false,
+    "strict-boolean-expressions": false,
+    "variable-name": false
+  },
+  "rulesDirectory": []
+}

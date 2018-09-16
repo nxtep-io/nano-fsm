@@ -1,0 +1,56 @@
+{
+  "name": "nano-fsm",
+  "version": "2.1.0",
+  "description": "A minimalistic finite state machine for TS",
+  "author": "Luis Brito <luis@nxtep.io>",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "typings": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nxtep-io/nano-fsm.git"
+  },
+  "scripts": {
+    "build": "yarn run -s clean && tsc",
+    "clean": "rimraf ./dist",
+    "test": "jest --config jest.json",
+    "lint": "tslint --config tslint.json --project ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-commit": "git update-index --again",
+      "pre-push": "yarn test"
+    }
+  },
+  "lint-staged": {
+    "{api,config,tests}/**/*.ts": [
+      "prettier --write",
+      "tslint --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "ts-framework-common": "nxtep-io/ts-framework-common#v2"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "husky": "^1.0.0-rc.13",
+    "jest": "^23.4.2",
+    "lint-staged": "^7.2.0",
+    "nodemon": "^1.12.1",
+    "prettier": "^1.14.0",
+    "rimraf": "^2.6.2",
+    "sinon": "^5.0.3",
+    "ts-jest": "^23.1.2",
+    "ts-node": "^7.0.0",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.9.2",
+    "tslint-config-prettier": "^1.14.0",
+    "tslint-no-circular-imports": "^0.5.0",
+    "typescript": "^3.0.1"
+  }
+}

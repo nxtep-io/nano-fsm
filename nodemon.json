@@ -1,0 +1,12 @@
+{
+  "delay": "1000",
+  "debug": true,
+  "ext": "ts js",
+  "exec": "node --require ts-node/register ./start.ts",
+  "ignore": [
+    "build/*",
+    "coverage/*",
+    ".idea",
+    "./tests/*"
+  ]
+}
