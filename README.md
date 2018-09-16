@@ -1,7 +1,7 @@
-ts-framework-common
-===================
+nano-fsm
+========
 
-A minimalistic framework for typescript based applications, with async/await and decorators support.
+A minimalistic finite state machine for typescript based applications, with async/await and decorators support.
 
 ## License
 
