@@ -1,5 +1,5 @@
 import { Logger } from "ts-framework-common";
-import Action from "./Action";
+import Action, { TransitionData } from "./Action";
 export interface FSMOptions<State> {
     state?: State;
     logger?: Logger;
@@ -13,9 +13,16 @@ export default abstract class FSM<Instance, State> {
     protected options: FSMOptions<State>;
     protected abstract actions: Action<Instance, State>[];
     protected abstract initialState: State;
+    protected abstract states: State[];
     protected logger: Logger;
     protected _state: State;
     constructor(instance: Instance, options?: FSMOptions<State>);
+    /**
+     * Ensures the state desired is valid and registered in the machine.
+     *
+     * @param state The state to be checked
+     */
+    isValidState(state: State): boolean;
     /**
      * Get current machine state.
      */
@@ -33,7 +40,7 @@ export default abstract class FSM<Instance, State> {
      */
     canGoTo(to: State): boolean;
     /**
-     * Performs the internal state change in the machine, without validations. Should not be called directl, use "goTo".
+     * Performs the internal state change in the machine. Should not be called directl, use "goTo".
      *
      * @param to The destination state
      */
@@ -44,5 +51,5 @@ export default abstract class FSM<Instance, State> {
      * @param to The desired state
      * @param data An optional payload to be passed to the machine actions
      */
-    goTo(to: State, data?: any): Promise<boolean>;
+    goTo(to: State, data?: TransitionData<State>): Promise<boolean>;
 }

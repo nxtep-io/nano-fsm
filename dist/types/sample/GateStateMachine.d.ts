@@ -37,5 +37,6 @@ export declare class LockedGateMessageAction extends Action<Gate, GateState> {
 }
 export default class GateStateMachine extends FSM<Gate, GateState> {
     initialState: GateState;
+    states: GateState[];
     actions: (OpenGateAction | CloseGateAction | LockGateAction | UnlockGateAction | LockedGateMessageAction)[];
 }

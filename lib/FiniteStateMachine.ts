@@ -101,9 +101,11 @@ export default abstract class FSM<Instance, State> {
    * @param data An optional payload to be passed to the machine actions
    */
   public async goTo(to: State, data?: TransitionData<State>): Promise<boolean> {
-    if (to === this.state && !this.options.allowSameState) {
-      throw new Error(`Machine is already in "${this.state}" state`);
-    } else if (to === this.state) {
+    const state = this.state;
+
+    if (to === state && !this.options.allowSameState) {
+      throw new Error(`Machine is already in "${state}" state`);
+    } else if (to === state) {
       await this.setState(to, []);
       return true;
     }
@@ -122,7 +124,7 @@ export default abstract class FSM<Instance, State> {
 
       // TODO: Run this is series
       // Check if we can transition to the next state
-      const computedData = { ...data, to, from: this.state };
+      const computedData = { ...data, to, from: state };
       const results = await Promise.all(actions.map(action => action.onTransition(this.instance, computedData)));
       const ok = results.reduce((aggr, next) => aggr && next, true);
 
@@ -130,11 +132,11 @@ export default abstract class FSM<Instance, State> {
         await this.setState(to, actions);
         return true;
       } else {
-        this.logger.info(`Transition interrupted: "${this.state}" => "${to}"`);
+        this.logger.info(`Transition interrupted: "${state}" => "${to}"`);
       }
       // No transition available
     } else {
-      throw new Error(`No action available to transition from "${this.state}" to "${to}" state.`);
+      throw new Error(`No action available to transition from "${state}" to "${to}" state.`);
     }
 
     return false;
