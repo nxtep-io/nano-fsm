@@ -1,5 +1,5 @@
 import { Logger } from "ts-framework-common";
-import Action from "./Action";
+import Action, { TransitionData } from "./Action";
 
 export interface FSMOptions<State> {
   state?: State;
@@ -13,19 +13,40 @@ export interface FSMOptions<State> {
 export default abstract class FSM<Instance, State> {
   protected abstract actions: Action<Instance, State>[];
   protected abstract initialState: State;
+  protected abstract states: State[];
   protected logger: Logger;
   protected _state: State;
 
   constructor(public instance: Instance, protected options: FSMOptions<State> = {}) {
-    this._state = options.state;
     this.logger = options.logger || new Logger();
+  }
+
+  /**
+   * Ensures the state desired is valid and registered in the machine.
+   * 
+   * @param state The state to be checked
+   */
+  isValidState(state: State) {
+    return this.states.indexOf(state) >= 0
   }
 
   /**
    * Get current machine state.
    */
   public get state(): State {
-    this._state = this._state || this.initialState;
+    // Ensure state is valid
+    if (!this._state && this.options.state && !this.isValidState(this.options.state)) {
+      throw new Error(`Invalid initial state: "${this.options.state}"`)
+    } else if (!this._state && this.initialState && !this.isValidState(this.initialState)) {
+      throw new Error(`Invalid initial state: "${this.initialState}"`)
+    } else if (!this._state && this.options.state) {
+      // Set the initial state locally
+      this._state = this.options.state;
+    } else if (!this._state) {
+      // Set the initial state locally
+      this._state = this.initialState;
+    }
+
     return this._state;
   }
 
@@ -37,7 +58,7 @@ export default abstract class FSM<Instance, State> {
   public pathsTo(to: State): false | Action<Instance, State>[] {
     if (to === this.state && !this.options.allowSameState) {
       return false;
-    } else if(to === this.state) {
+    } else if (to === this.state) {
       return [];
     }
 
@@ -61,7 +82,7 @@ export default abstract class FSM<Instance, State> {
   }
 
   /**
-   * Performs the internal state change in the machine, without validations. Should not be called directl, use "goTo".
+   * Performs the internal state change in the machine. Should not be called directl, use "goTo".
    * 
    * @param to The destination state
    */
@@ -79,12 +100,17 @@ export default abstract class FSM<Instance, State> {
    * @param to The desired state
    * @param data An optional payload to be passed to the machine actions
    */
-  public async goTo(to: State, data?: any): Promise<boolean> {
+  public async goTo(to: State, data?: TransitionData<State>): Promise<boolean> {
     if (to === this.state && !this.options.allowSameState) {
       throw new Error(`Machine is already in "${this.state}" state`);
     } else if (to === this.state) {
       await this.setState(to, []);
       return true;
+    }
+
+    // Ensure state is valid
+    if (!this.isValidState(to)) {
+      throw new Error(`Invalid state: "${to}"`)
     }
 
     // Get all available actions from the current machine

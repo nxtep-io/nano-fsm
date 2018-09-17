@@ -8,7 +8,7 @@ export interface Gate {
 export enum GateState {
   OPENED = "opened", // Gate is opened for travelers
   CLOSED = "closed", // Gate is closed but unlocked, it may be opened by travelers
-  LOCKED = "locked" // Gate is closed and locked, cannot unlock without a password
+  LOCKED = "locked", // Gate is closed and locked, cannot unlock without a password
 }
 
 export class OpenGateAction extends Action<Gate, GateState> {
@@ -57,6 +57,13 @@ export class LockedGateMessageAction extends Action<Gate, GateState> {
 export default class GateStateMachine extends FSM<Gate, GateState> {
   /* Sets the machine initial state */
   initialState: GateState = GateState.CLOSED;
+
+  /* The available states */
+  states: GateState[] = [
+    GateState.OPENED,
+    GateState.CLOSED,
+    GateState.LOCKED,
+  ];
 
   /* Sets the machine available actions */
   actions = [
