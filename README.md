@@ -74,6 +74,24 @@ export class UnlockGateAction extends Action<Gate, GateState> {
 }
 ```
 
+Wildcard is supported (regex coming soon)
+
+```typescript
+export class LockedMessageGateAction extends Action<Gate, GateState> {
+  from = '*';
+  to = GateState.CLOSED;
+
+  /**
+   * Sends info log after any transition to "CLOSED" state 
+   */
+  afterTransition() {
+    // Be careful with widcards, they enable any state transition with a matching pair!
+    this.logger.info('Gate is closed!');
+  }
+}
+
+```
+
 Finally, our Gate State Machine can be created.
 
 ```typescript
