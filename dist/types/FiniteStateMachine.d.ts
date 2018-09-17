@@ -1,14 +1,48 @@
 import { Logger } from "ts-framework-common";
 import Action from "./Action";
-export interface FSMOptions {
+export interface FSMOptions<State> {
+    state?: State;
     logger?: Logger;
+    allowSameState?: boolean;
 }
+/**
+ * The main Finite State Machine manager, that holds all available actions and performs the state transitions.
+ */
 export default abstract class FSM<Instance, State> {
     instance: Instance;
-    protected options: FSMOptions;
-    abstract state: State;
+    protected options: FSMOptions<State>;
     protected abstract actions: Action<Instance, State>[];
+    protected abstract initialState: State;
     protected logger: Logger;
-    constructor(instance: Instance, options?: FSMOptions);
-    goTo(to: State, data?: any): Promise<void>;
+    protected _state: State;
+    constructor(instance: Instance, options?: FSMOptions<State>);
+    /**
+     * Get current machine state.
+     */
+    readonly state: State;
+    /**
+     * Gets all available actions to go to a determined state.
+     *
+     * @param to The desired state
+     */
+    pathsTo(to: State): false | Action<Instance, State>[];
+    /**
+     * Checks if can go to desired state.
+     *
+     * @param to The desired state
+     */
+    canGoTo(to: State): boolean;
+    /**
+     * Performs the internal state change in the machine, without validations. Should not be called directl, use "goTo".
+     *
+     * @param to The destination state
+     */
+    protected setState(to: State, actions: Action<Instance, State>[]): Promise<void>;
+    /**
+     * Performs a new transition in the machine.
+     *
+     * @param to The desired state
+     * @param data An optional payload to be passed to the machine actions
+     */
+    goTo(to: State, data?: any): Promise<boolean>;
 }

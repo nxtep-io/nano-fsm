@@ -2,22 +2,31 @@ import { Logger } from "ts-framework-common";
 import Action from "./Action";
 
 export interface FSMOptions<State> {
+  state?: State;
   logger?: Logger;
-  initialState?: State;
+  allowSameState?: boolean;
 }
 
 /**
  * The main Finite State Machine manager, that holds all available actions and performs the state transitions.
  */
 export default abstract class FSM<Instance, State> {
-  public state: State;
   protected abstract actions: Action<Instance, State>[];
+  protected abstract initialState: State;
   protected logger: Logger;
+  protected _state: State;
 
   constructor(public instance: Instance, protected options: FSMOptions<State> = {}) {
-    this.state = options.initialState || this.state;
+    this._state = options.state;
     this.logger = options.logger || new Logger();
-    this.logger.silly("Initializing finite state machine", this.options);
+  }
+
+  /**
+   * Get current machine state.
+   */
+  public get state(): State {
+    this._state = this._state || this.initialState;
+    return this._state;
   }
 
   /**
@@ -26,8 +35,10 @@ export default abstract class FSM<Instance, State> {
    * @param to The desired state
    */
   public pathsTo(to: State): false | Action<Instance, State>[] {
-    if (to === this.state) {
+    if (to === this.state && !this.options.allowSameState) {
       return false;
+    } else if(to === this.state) {
+      return [];
     }
 
     // Get all available actions from the current machine
@@ -50,21 +61,36 @@ export default abstract class FSM<Instance, State> {
   }
 
   /**
+   * Performs the internal state change in the machine, without validations. Should not be called directl, use "goTo".
+   * 
+   * @param to The destination state
+   */
+  protected async setState(to: State, actions: Action<Instance, State>[]): Promise<void> {
+    // Set the next state locally
+    this._state = to;
+
+    // Notify we're entered the next state
+    await Promise.all(actions.map(action => action.afterTransition(this.instance)));
+  }
+
+  /**
    * Performs a new transition in the machine.
    * 
    * @param to The desired state
    * @param data An optional payload to be passed to the machine actions
    */
   public async goTo(to: State, data?: any): Promise<boolean> {
-    if (to === this.state) {
+    if (to === this.state && !this.options.allowSameState) {
       throw new Error(`Machine is already in "${this.state}" state`);
+    } else if (to === this.state) {
+      await this.setState(to, []);
+      return true;
     }
 
     // Get all available actions from the current machine
     const actions = this.pathsTo(to);
 
     if (actions) {
-      // TODO: Run this is series
       // Notify we're leaving the current state
       await Promise.all(actions.map(action => action.beforeTransition(this.instance)));
 
@@ -75,11 +101,7 @@ export default abstract class FSM<Instance, State> {
       const ok = results.reduce((aggr, next) => aggr && next, true);
 
       if (ok) {
-        // Set the next state locally
-        this.state = to;
-
-        // Notify we're entered the next state
-        await Promise.all(actions.map(action => action.afterTransition(this.instance)));
+        await this.setState(to, actions);
         return true;
       } else {
         this.logger.info(`Transition interrupted: "${this.state}" => "${to}"`);

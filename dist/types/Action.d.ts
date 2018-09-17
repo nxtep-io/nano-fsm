@@ -3,6 +3,11 @@ export interface ActionOptions {
     name?: string;
     logger?: Logger;
 }
+export interface TransitionData<State> {
+    from: State;
+    to: State;
+    [key: string]: any;
+}
 export default abstract class Action<Instance, State> {
     protected options: ActionOptions;
     abstract from: State | string;
@@ -10,9 +15,8 @@ export default abstract class Action<Instance, State> {
     name: string;
     protected logger: any;
     constructor(options?: ActionOptions);
-    onLeave(instance: Instance): void;
-    onTransition(instance: Instance, data?: any): Promise<boolean>;
-    onEnter(instance: Instance): void;
-    matchesFrom(state: "*" | State): boolean;
-    matchesTo(state: "*" | State): boolean;
+    beforeTransition(instance: Instance): void;
+    onTransition(instance: Instance, data: TransitionData<State>): Promise<boolean>;
+    afterTransition(instance: Instance): void;
+    matches(from: "*" | State, to: "*" | State): boolean;
 }

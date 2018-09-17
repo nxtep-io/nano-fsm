@@ -56,7 +56,7 @@ export class LockedGateMessageAction extends Action<Gate, GateState> {
 
 export default class GateStateMachine extends FSM<Gate, GateState> {
   /* Sets the machine initial state */
-  state: GateState = GateState.CLOSED;
+  initialState: GateState = GateState.CLOSED;
 
   /* Sets the machine available actions */
   actions = [

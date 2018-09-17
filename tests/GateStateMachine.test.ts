@@ -53,4 +53,22 @@ describe("lib.smaples.GateStateMachine", () => {
     await expect(gate.goTo(GateState.CLOSED, {})).rejects.toThrow(/invalid gate password/ig);
     expect(gate.state).toBe(GateState.LOCKED);
   });
+
+  describe('allow same state', async () => {
+    let gate;
+
+    beforeEach(async () => {
+      gate = new GateStateMachine({
+        name: 'Test Gate',
+        password: 'test',
+      }, { state: GateState.OPENED, allowSameState: true });
+    })
+
+    it("should transition to the initial state properly", async () => {
+      // Should go to current state
+      expect(gate.state).toBe(GateState.OPENED);
+      expect(gate.canGoTo(GateState.OPENED)).toBe(true);
+      expect(await gate.goTo(GateState.OPENED)).toBe(true);
+    });
+  })
 });

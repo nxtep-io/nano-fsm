@@ -1,4 +1,4 @@
-import FSM, { Action } from "../";
+import FSM, { Action, TransitionData } from "../";
 export interface Gate {
     name: string;
     password: string;
@@ -26,11 +26,16 @@ export declare class UnlockGateAction extends Action<Gate, GateState> {
     /**
      * Ensures the gate password is checked when unlocking.
      */
-    onTransition(instance: Gate, data?: {
+    onTransition(instance: Gate, data: TransitionData<GateState> & {
         password: string;
     }): Promise<boolean>;
 }
+export declare class LockedGateMessageAction extends Action<Gate, GateState> {
+    from: string;
+    to: GateState;
+    onTransition(instance: Gate, data: TransitionData<GateState>): Promise<boolean>;
+}
 export default class GateStateMachine extends FSM<Gate, GateState> {
-    state: GateState;
-    actions: (OpenGateAction | CloseGateAction | LockGateAction | UnlockGateAction)[];
+    initialState: GateState;
+    actions: (OpenGateAction | CloseGateAction | LockGateAction | UnlockGateAction | LockedGateMessageAction)[];
 }
