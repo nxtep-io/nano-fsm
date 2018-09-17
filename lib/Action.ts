@@ -16,7 +16,7 @@ export default abstract class Action<Instance, State> {
     this.logger = options.logger || new Logger();
   }
 
-  public onLeave(instance: Instance): void {
+  public beforeTransition(instance: Instance): void {
     this.logger.silly(`${this.name}: leaving state "${this.from}"`);
   }
 
@@ -25,15 +25,13 @@ export default abstract class Action<Instance, State> {
     return true;
   }
 
-  public onEnter(instance: Instance): void {
+  public afterTransition(instance: Instance): void {
     this.logger.silly(`${this.name}: entering "${this.to}"`);
   }
 
-  public matchesFrom(state: "*" | State) {
-    return this.from === "*" || this.from === state;
-  }
-
-  public matchesTo(state: "*" | State) {
-    return this.to === "*" || this.to === state;
+  public matches(from: "*" | State, to: "*" | State) {
+    const matchesFrom = this.from === "*" || this.from === from;
+    const matchesTo = this.to === "*" || this.to === to;
+    return matchesFrom && matchesTo;
   }
 }

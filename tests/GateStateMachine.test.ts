@@ -1,41 +1,48 @@
 import { GateStateMachine, GateState } from '../lib/sample';
 
 describe("lib.smaples.GateStateMachine", () => {
-  it("should instantiate a GateStateMachine properly", async () => {
-    const gate = new GateStateMachine({
+  let gate;
+
+  beforeEach(async () => {
+    gate = new GateStateMachine({
       name: 'Test Gate',
       password: 'test',
     });
+  })
 
-    // Start by locking the gate
+  it("should transition to a valid state properly", async () => {
+    // Start by locking the gate, a valid transition
     await gate.goTo(GateState.LOCKED);
+    expect(gate.state).toBe(GateState.LOCKED);
+    await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/already in \"locked\" state/ig);
+  });
 
-    try {
-      // Tries to open the gate
-      await gate.goTo(GateState.OPENED);
-      throw new Error('Should not be here');
-    } catch (exception) {
-      // Accepts only action exception
-      if (!exception.message.match(/No action available/gi)) {
-        throw exception;
-      }
-    }
+  it("should transition to a valid state with a valid payload", async () => {
+    // Start by locking the gate, a valid transition
+    await gate.goTo(GateState.LOCKED);
+    expect(gate.state).toBe(GateState.LOCKED);
 
-    try {
-      // Tries to unlocks the gate without password
-      await gate.goTo(GateState.CLOSED);
-      throw new Error('Should not be here');
-    } catch (exception) {
-      // Accepts only action exception
-      if (!exception.message.match(/Invalid gate password/gi)) {
-        throw exception;
-      }
-    }
+    // Now, unlock the gate properly
+    expect(await gate.goTo(GateState.CLOSED, { password: 'test' })).toBe(true);
+    expect(gate.state).toBe(GateState.CLOSED);
 
-    // Unlock gate
-    await gate.goTo(GateState.CLOSED, { password: "test" });
-
-    // Open gate
+    // Open the gate!
     await gate.goTo(GateState.OPENED);
+    expect(gate.state).toBe(GateState.OPENED);
+
+    // Now, an invalid transition
+    await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/no action available/ig);
+    expect(gate.state).toBe(GateState.OPENED);
+  });
+
+
+  it("should not transition to a valid state without a valid payload", async () => {
+    // Start by locking the gate, a valid transition
+    await gate.goTo(GateState.LOCKED);
+    expect(gate.state).toBe(GateState.LOCKED);
+
+    // Now, an invalid transition
+    await expect(gate.goTo(GateState.CLOSED, {})).rejects.toThrow(/invalid gate password/ig);
+    expect(gate.state).toBe(GateState.LOCKED);
   });
 });

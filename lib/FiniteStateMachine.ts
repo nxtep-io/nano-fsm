@@ -15,24 +15,33 @@ export default abstract class FSM<Instance, State> {
     this.logger.silly("Initializing new finite machine state", this.options);
   }
 
-  public async goTo(to: State, data?: any) {
-    // TODO: We should not enable more than one equal pair
-    const action = this.actions.find(action => action.matchesFrom(this.state) && action.matchesTo(to));
+  public async goTo(to: State, data?: any): Promise<boolean> {
+    if (to === this.state) {
+      throw new Error(`Machine is already in "${this.state}" state`);
+    }
 
-    if (action) {
+    // Get all available actions from the current machine
+    const actions = this.actions.filter(action => action.matches(this.state, to));
+
+    if (actions && actions.length) {
+      // TODO: Run this is series
       // Notify we're leaving the current state
-      await action.onLeave(this.instance);
+      await Promise.all(actions.map(action => action.beforeTransition(this.instance)));
 
+      // TODO: Run this is series
       // Check if we can transition to the next state
-      const ok = await action.onTransition(this.instance, data);
+      const results = await Promise.all(actions.map(action => action.onTransition(this.instance, data)));
+      const ok = results.reduce((aggr, next) => aggr && next, true);
 
       if (ok) {
         // Set the next state locally
         this.state = to;
 
         // Notify we're entered the next state
-        await action.onEnter(this.instance);
+        await Promise.all(actions.map(action => action.afterTransition(this.instance)));
+        return true;
       }
+      // No transition available
     } else {
       throw new Error(`No action available to transition from "${this.state}" to "${to}" state.`);
     }

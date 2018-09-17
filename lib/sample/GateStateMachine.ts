@@ -16,6 +16,15 @@ export class OpenGateAction extends Action<Gate, GateState> {
   to = GateState.OPENED;
 }
 
+export class WelcomeMessageGateAction extends Action<Gate, GateState> {
+  from = '*';
+  to = GateState.OPENED;
+
+  beforeTransition() {
+    this.logger.info('Hello stranger, welcome to my gate');
+  }
+}
+
 export class CloseGateAction extends Action<Gate, GateState> {
   from = GateState.OPENED;
   to = GateState.CLOSED;
@@ -46,5 +55,11 @@ export default class GateStateMachine extends FSM<Gate, GateState> {
   state: GateState = GateState.CLOSED;
 
   /* Sets the machine available actions */
-  actions = [new OpenGateAction(), new CloseGateAction(), new LockGateAction(), new UnlockGateAction()];
+  actions = [
+    new WelcomeMessageGateAction(),
+    new OpenGateAction(),
+    new CloseGateAction(),
+    new LockGateAction(),
+    new UnlockGateAction()
+  ];
 }
