@@ -89,7 +89,6 @@ export class LockedMessageGateAction extends Action<Gate, GateState> {
     this.logger.info('Gate is closed!');
   }
 }
-
 ```
 
 Finally, our Gate State Machine can be created.
@@ -125,6 +124,50 @@ await gate.goTo(GateState.CLOSED, { password: 'friend' });
 
 // Now, you shall pass
 await gate.goTo(GateState.OPENED);
+```
+
+**Interrupting a transition**
+
+There are two ways of interrupting a transition: `soft interruption` and `hard interruption`.
+
+A soft interruption does not throw any exception, but the state never changes in the machine.
+
+```typescript
+export class LockedGateMessageAction extends Action<Gate, GateState> {
+  from = '*';
+  to = GateState.OPENED;
+
+  async onTransition(instance: Gate, data: TransitionData<GateState>) {
+    
+    if (data.from === GateState.LOCKED) {
+      this.logger.warn('Gate is locked! We need a password');
+
+      // Interrupts the transition without throwing any exception
+      return false;
+    }
+
+    return true;
+  }
+}
+```
+
+A hard interruption stops the transition and throws an error to the caller.
+
+```typescript
+export class LockedGateMessageAction extends Action<Gate, GateState> {
+  from = '*';
+  to = GateState.OPENED;
+
+  async onTransition(instance: Gate, data: TransitionData<GateState>) {
+    
+    if (data.from === GateState.LOCKED) {
+      // Interrupts the transition with exception
+      throw new Error('Gate is locked! We need a password');
+    }
+
+    return true;
+  }
+}
 ```
 
 ## License

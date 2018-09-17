@@ -5,6 +5,12 @@ export interface ActionOptions {
   logger?: Logger;
 }
 
+export interface TransitionData<State> {
+  from: State;
+  to: State;
+  [key: string]: any;
+}
+
 export default abstract class Action<Instance, State> {
   public abstract from: State | string;
   public abstract to: State | string;
@@ -20,7 +26,7 @@ export default abstract class Action<Instance, State> {
     this.logger.silly(`${this.name}: leaving state "${this.from}"`);
   }
 
-  public async onTransition(instance: Instance, data?: any): Promise<boolean> {
+  public async onTransition(instance: Instance, data: TransitionData<State>): Promise<boolean> {
     this.logger.silly(`${this.name}: transitioning states "${this.from}" => "${this.to}"`);
     return true;
   }

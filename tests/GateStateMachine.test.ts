@@ -12,9 +12,17 @@ describe("lib.smaples.GateStateMachine", () => {
 
   it("should transition to a valid state properly", async () => {
     // Start by locking the gate, a valid transition
+    expect(gate.canGoTo(GateState.LOCKED)).toBe(true);
     await gate.goTo(GateState.LOCKED);
     expect(gate.state).toBe(GateState.LOCKED);
     await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/already in \"locked\" state/ig);
+
+    // Should enable go to OPEN, but never accomplish.
+    expect(gate.canGoTo(GateState.OPENED)).toBe(true);
+    expect(await gate.goTo(GateState.OPENED)).toBe(false);
+
+    // Should not go to current state either
+    expect(gate.canGoTo(GateState.LOCKED)).toBe(false);
   });
 
   it("should transition to a valid state with a valid payload", async () => {

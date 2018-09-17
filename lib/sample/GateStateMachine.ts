@@ -1,4 +1,4 @@
-import FSM, { Action } from "../";
+import FSM, { Action, TransitionData } from "../";
 
 export interface Gate {
   name: string;
@@ -33,11 +33,24 @@ export class UnlockGateAction extends Action<Gate, GateState> {
   /**
    * Ensures the gate password is checked when unlocking.
    */
-  async onTransition(instance: Gate, data?: { password: string }) {
+  async onTransition(instance: Gate, data: TransitionData<GateState> & { password: string }) {
     if (data && instance.password === data.password) {
       return super.onTransition(instance, data);
     }
     throw new Error("Invalid gate password, cannot unlock");
+  }
+}
+
+export class LockedGateMessageAction extends Action<Gate, GateState> {
+  from = '*';
+  to = GateState.OPENED;
+
+  async onTransition(instance: Gate, data: TransitionData<GateState>) {
+    if (data.from === GateState.LOCKED) {
+      this.logger.warn('Gate is locked! We need a password');
+      return false;
+    }
+    return true;
   }
 }
 
@@ -51,5 +64,6 @@ export default class GateStateMachine extends FSM<Gate, GateState> {
     new CloseGateAction(),
     new LockGateAction(),
     new UnlockGateAction(),
+    new LockedGateMessageAction(),
   ];
 }
