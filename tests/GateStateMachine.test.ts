@@ -1,21 +1,21 @@
-import { GateStateMachine, GateState } from '../lib/sample';
+import { GateStateMachine, GateState } from "../examples";
 
 describe("lib.samples.GateStateMachine", () => {
   let gate;
 
   beforeEach(async () => {
     gate = new GateStateMachine({
-      name: 'Test Gate',
-      password: 'test',
+      name: "Test Gate",
+      password: "test"
     });
-  })
+  });
 
   it("should transition to a valid state properly", async () => {
     // Start by locking the gate, a valid transition
     expect(gate.canGoTo(GateState.LOCKED)).toBe(true);
     await gate.goTo(GateState.LOCKED);
     expect(gate.state).toBe(GateState.LOCKED);
-    await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/already in \"locked\" state/ig);
+    await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/already in \"locked\" state/gi);
 
     // Should enable go to OPEN, but never accomplish.
     expect(gate.canGoTo(GateState.OPENED)).toBe(true);
@@ -31,7 +31,7 @@ describe("lib.samples.GateStateMachine", () => {
     expect(gate.state).toBe(GateState.LOCKED);
 
     // Now, unlock the gate properly
-    expect(await gate.goTo(GateState.CLOSED, { password: 'test' })).toBe(true);
+    expect(await gate.goTo(GateState.CLOSED, { password: "test" })).toBe(true);
     expect(gate.state).toBe(GateState.CLOSED);
 
     // Open the gate!
@@ -39,10 +39,9 @@ describe("lib.samples.GateStateMachine", () => {
     expect(gate.state).toBe(GateState.OPENED);
 
     // Now, an invalid transition
-    await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/no action available/ig);
+    await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/no action available/gi);
     expect(gate.state).toBe(GateState.OPENED);
   });
-
 
   it("should not transition to a valid state without a valid payload", async () => {
     // Start by locking the gate, a valid transition
@@ -50,23 +49,26 @@ describe("lib.samples.GateStateMachine", () => {
     expect(gate.state).toBe(GateState.LOCKED);
 
     // Now, an invalid transition
-    await expect(gate.goTo(GateState.CLOSED, {})).rejects.toThrow(/invalid gate password/ig);
+    await expect(gate.goTo(GateState.CLOSED, {})).rejects.toThrow(/invalid gate password/gi);
     expect(gate.state).toBe(GateState.LOCKED);
   });
 
   it("should not transition unknown state ", async () => {
-    expect(gate.goTo('unknonwn')).rejects.toThrow(/Invalid state/ig);
+    expect(gate.goTo("unknonwn")).rejects.toThrow(/Invalid state/gi);
   });
 
-  describe('allow same state', async () => {
+  describe("allow same state", async () => {
     let gate;
 
     beforeEach(async () => {
-      gate = new GateStateMachine({
-        name: 'Test Gate',
-        password: 'test',
-      }, { state: GateState.OPENED, allowSameState: true });
-    })
+      gate = new GateStateMachine(
+        {
+          name: "Test Gate",
+          password: "test"
+        },
+        { state: GateState.OPENED, allowSameState: true }
+      );
+    });
 
     it("should transition to the initial state properly", async () => {
       // Should go to current state
@@ -76,37 +78,40 @@ describe("lib.samples.GateStateMachine", () => {
     });
   });
 
-  describe('invalid initial state', async () => {
+  describe("invalid initial state", async () => {
     let gate;
 
     beforeEach(async () => {
       gate = new GateStateMachine({
-        name: 'Test Gate',
-        password: 'test',
+        name: "Test Gate",
+        password: "test"
       });
 
-      gate.initialState = 'unknown';
-    })
+      gate.initialState = "unknown";
+    });
 
     it("should transition to the initial state properly", async () => {
       // Should go to current state
-      expect(() => gate.state).toThrow(/Invalid initial state/ig);
+      expect(() => gate.state).toThrow(/Invalid initial state/gi);
     });
   });
 
-  describe('invalid initial state from constructor', async () => {
+  describe("invalid initial state from constructor", async () => {
     let gate;
 
     beforeEach(async () => {
-      gate = new GateStateMachine({
-        name: 'Test Gate',
-        password: 'test',
-      }, { state: 'unknown' as any });
-    })
+      gate = new GateStateMachine(
+        {
+          name: "Test Gate",
+          password: "test"
+        },
+        { state: "unknown" as any }
+      );
+    });
 
     it("should transition to the initial state properly", async () => {
       // Should go to current state
-      expect(() => gate.state).toThrow(/Invalid initial state/ig);
+      expect(() => gate.state).toThrow(/Invalid initial state/gi);
     });
   });
 });

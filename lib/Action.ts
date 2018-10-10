@@ -5,13 +5,18 @@ export interface ActionOptions {
   logger?: Logger;
 }
 
-export interface TransitionData<State> {
+export type TransitionBasicData<State> = {
   from: State;
   to: State;
-  [key: string]: any;
 }
 
-export default abstract class Action<Instance, State> {
+export type TransitionPayload<Payload> = {
+  [key in keyof Payload]?: Payload[key];
+}
+
+export type TransitionData<State, Payload = any> = TransitionBasicData<State> & TransitionPayload<Payload>;
+
+export default abstract class Action<Instance, State, Payload = any> {
   public abstract from: State | string;
   public abstract to: State | string;
   public name: string;
@@ -22,20 +27,41 @@ export default abstract class Action<Instance, State> {
     this.logger = options.logger || new Logger();
   }
 
+  /**
+   * 
+   * @param instance The state machine instance
+   */
   public beforeTransition(instance: Instance): void {
     this.logger.silly(`${this.name}: leaving state "${this.from}"`);
   }
 
-  public async onTransition(instance: Instance, data: TransitionData<State>): Promise<boolean> {
-    this.logger.silly(`${this.name}: transitioning states "${this.from}" => "${this.to}"`);
+  /**
+   * Handles a state transition
+   * 
+   * @param instance The state machine instance.
+   * @param data The transition payload passed to the fsm.goTo() method.
+   */
+  public async onTransition(instance: Instance, data: TransitionData<State, Payload>): Promise<boolean> {
+    this.logger.silly(`${this.name}: transitioning states "${this.from}" => "${this.to}"`, { data });
     return true;
   }
 
+  /**
+   * Handles post transition results.
+   * 
+   * @param instance The state machine instance.
+   */
   public afterTransition(instance: Instance): void {
     this.logger.silly(`${this.name}: entering "${this.to}"`);
   }
 
-  public matches(from: "*" | State, to: "*" | State) {
+  /**
+   * Checks if action matches from/to state pair specified.
+   * 
+   * @param from The original state to be checked against.
+   * @param to The destination state to be checked against.
+   */
+  public matches(from: "*" | State, to: "*" | State): boolean {
     const matchesFrom = this.from === "*" || this.from === from;
     const matchesTo = this.to === "*" || this.to === to;
     return matchesFrom && matchesTo;

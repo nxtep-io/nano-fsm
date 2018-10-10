@@ -59,7 +59,7 @@
 					<a href="action.html">Action</a>
 				</li>
 			</ul>
-			<h1>Class Action&lt;Instance, State&gt;</h1>
+			<h1>Class Action&lt;Instance, State, Payload&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -74,6 +74,9 @@
 					</li>
 					<li>
 						<h4>State</h4>
+					</li>
+					<li>
+						<h4>Payload</h4>
 					</li>
 				</ul>
 			</section>
@@ -129,7 +132,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L18">Action.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L23">Action.ts:23</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -151,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">State</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L15">Action.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L20">Action.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -161,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L18">Action.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L23">Action.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -171,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L17">Action.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L22">Action.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -181,7 +184,7 @@
 					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <a href="../interfaces/actionoptions.html" class="tsd-signature-type">ActionOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L20">Action.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L25">Action.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -191,7 +194,7 @@
 					<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">State</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L16">Action.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L21">Action.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -208,13 +211,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L34">Action.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L54">Action.ts:54</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Handles post transition results.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>instance: <span class="tsd-signature-type">Instance</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The state machine instance.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -231,13 +242,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L25">Action.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L34">Action.ts:34</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>instance: <span class="tsd-signature-type">Instance</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The state machine instance</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -254,16 +270,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L38">Action.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L64">Action.ts:64</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if action matches from/to state pair specified.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>from: <span class="tsd-signature-type">"*"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">State</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The original state to be checked against.</p>
+									</div>
 								</li>
 								<li>
 									<h5>to: <span class="tsd-signature-type">"*"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">State</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The destination state to be checked against.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -274,22 +301,33 @@
 					<a name="ontransition" class="tsd-anchor"></a>
 					<h3>on<wbr>Transition</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Transition<span class="tsd-signature-symbol">(</span>instance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Instance</span>, data<span class="tsd-signature-symbol">: </span><a href="../interfaces/transitiondata.html" class="tsd-signature-type">TransitionData</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Transition<span class="tsd-signature-symbol">(</span>instance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Instance</span>, data<span class="tsd-signature-symbol">: </span><a href="../globals.html#transitiondata" class="tsd-signature-type">TransitionData</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Payload</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/de83888/lib/Action.ts#L29">Action.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/nxtep-io/nano-fsm/blob/58bde2b/lib/Action.ts#L44">Action.ts:44</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Handles a state transition</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>instance: <span class="tsd-signature-type">Instance</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The state machine instance.</p>
+									</div>
 								</li>
 								<li>
-									<h5>data: <a href="../interfaces/transitiondata.html" class="tsd-signature-type">TransitionData</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>data: <a href="../globals.html#transitiondata" class="tsd-signature-type">TransitionData</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Payload</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The transition payload passed to the fsm.goTo() method.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -356,8 +394,14 @@
 					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
 						<a href="../interfaces/fsmoptions.html" class="tsd-kind-icon">FSMOptions</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="../interfaces/transitiondata.html" class="tsd-kind-icon">Transition<wbr>Data</a>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="../globals.html#transitionbasicdata" class="tsd-kind-icon">Transition<wbr>Basic<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="../globals.html#transitiondata" class="tsd-kind-icon">Transition<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="../globals.html#transitionpayload" class="tsd-kind-icon">Transition<wbr>Payload</a>
 					</li>
 				</ul>
 			</nav>

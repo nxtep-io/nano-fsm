@@ -1,5 +1,5 @@
 import { Logger } from "ts-framework-common";
-import Action, { TransitionData } from "./Action";
+import Action from "./Action";
 
 export interface FSMOptions<State> {
   state?: State;
@@ -10,8 +10,8 @@ export interface FSMOptions<State> {
 /**
  * The main Finite State Machine manager, that holds all available actions and performs the state transitions.
  */
-export default abstract class FSM<Instance, State> {
-  protected abstract actions: Action<Instance, State>[];
+export default abstract class FSM<Instance, State, Payload = any> {
+  protected abstract actions: Action<Instance, State, Payload>[];
   protected abstract initialState: State;
   protected abstract states: State[];
   protected logger: Logger;
@@ -102,7 +102,7 @@ export default abstract class FSM<Instance, State> {
    * @param to The desired state
    * @param data An optional payload to be passed to the machine actions
    */
-  public async goTo(to: State, data?: TransitionData<State>): Promise<boolean> {
+  public async goTo(to: State, data?: Payload): Promise<boolean> {
     const state = this.state;
 
     if (to === state && !this.options.allowSameState) {
@@ -126,7 +126,7 @@ export default abstract class FSM<Instance, State> {
 
       // TODO: Run this is series
       // Check if we can transition to the next state
-      const computedData = { ...data, to, from: state };
+      const computedData = { ...(data || {}), to, from: state };
       const results = await Promise.all(actions.map(action => action.onTransition(this.instance, computedData)));
       const ok = results.reduce((aggr, next) => aggr && next, true);
 

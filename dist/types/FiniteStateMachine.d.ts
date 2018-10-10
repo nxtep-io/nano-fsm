@@ -1,5 +1,5 @@
 import { Logger } from "ts-framework-common";
-import Action, { TransitionData } from "./Action";
+import Action from "./Action";
 export interface FSMOptions<State> {
     state?: State;
     logger?: Logger;
@@ -8,10 +8,10 @@ export interface FSMOptions<State> {
 /**
  * The main Finite State Machine manager, that holds all available actions and performs the state transitions.
  */
-export default abstract class FSM<Instance, State> {
+export default abstract class FSM<Instance, State, Payload = any> {
     instance: Instance;
     protected options: FSMOptions<State>;
-    protected abstract actions: Action<Instance, State>[];
+    protected abstract actions: Action<Instance, State, Payload>[];
     protected abstract initialState: State;
     protected abstract states: State[];
     protected logger: Logger;
@@ -51,5 +51,5 @@ export default abstract class FSM<Instance, State> {
      * @param to The desired state
      * @param data An optional payload to be passed to the machine actions
      */
-    goTo(to: State, data?: TransitionData<State>): Promise<boolean>;
+    goTo(to: State, data?: Payload): Promise<boolean>;
 }
