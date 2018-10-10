@@ -11,7 +11,7 @@ export type TransitionBasicData<State> = {
 }
 
 export type TransitionPayload<Payload> = {
-  [key in keyof Payload]?: Payload[key];
+  [key in keyof Payload]: Payload[key];
 }
 
 export type TransitionData<State, Payload = any> = TransitionBasicData<State> & TransitionPayload<Payload>;

@@ -8,7 +8,7 @@ export declare type TransitionBasicData<State> = {
     to: State;
 };
 export declare type TransitionPayload<Payload> = {
-    [key in keyof Payload]?: Payload[key];
+    [key in keyof Payload]: Payload[key];
 };
 export declare type TransitionData<State, Payload = any> = TransitionBasicData<State> & TransitionPayload<Payload>;
 export default abstract class Action<Instance, State, Payload = any> {
