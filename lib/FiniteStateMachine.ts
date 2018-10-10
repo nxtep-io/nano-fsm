@@ -1,3 +1,4 @@
+import * as EventEmitter from 'events';
 import { Logger } from "ts-framework-common";
 import Action, { TransitionData } from "./Action";
 
@@ -10,7 +11,7 @@ export interface FSMOptions<State> {
 /**
  * The main Finite State Machine manager, that holds all available actions and performs the state transitions.
  */
-export default abstract class FSM<Instance, State> {
+export default abstract class FSM<Instance, State> extends EventEmitter {
   protected abstract actions: Action<Instance, State>[];
   protected abstract initialState: State;
   protected abstract states: State[];
@@ -18,7 +19,14 @@ export default abstract class FSM<Instance, State> {
   protected _state: State;
 
   constructor(public instance: Instance, protected options: FSMOptions<State> = {}) {
+    super();
     this.logger = options.logger || new Logger();
+  }
+
+  public emit(event: string | symbol, ...args: any[]): boolean {
+    throw new Error(
+      `Cannot emit events to the State Machine. If you are trying to change its state use fsm.goTo()`
+    );
   }
 
   /**
@@ -58,7 +66,9 @@ export default abstract class FSM<Instance, State> {
   public pathsTo(to: State): false | Action<Instance, State>[] {
     if (to === this.state && !this.options.allowSameState) {
       return false;
-    } else if (to === this.state) {
+    }
+
+    if (to === this.state) {
       return [];
     }
 
@@ -131,10 +141,9 @@ export default abstract class FSM<Instance, State> {
       if (ok) {
         await this.setState(to, actions);
         return true;
-      } else {
-        this.logger.info(`Transition interrupted: "${state}" => "${to}"`);
       }
-      // No transition available
+
+      this.logger.info(`Transition interrupted: "${state}" => "${to}"`);
     } else {
       throw new Error(`No action available to transition from "${state}" to "${to}" state.`);
     }

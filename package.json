@@ -17,6 +17,7 @@
     "build": "yarn run -s clean && tsc",
     "clean": "rimraf ./dist",
     "test": "jest --config jest.json",
+    "docs": "./scripts/docs.sh",
     "lint": "tslint --config tslint.json --project ."
   },
   "husky": {
@@ -42,6 +43,7 @@
     "jest": "^23.4.2",
     "lint-staged": "^7.2.0",
     "nodemon": "^1.12.1",
+    "nxtep-typedoc-theme": "nxtep-io/nxtep-typedoc-theme",
     "prettier": "^1.14.0",
     "rimraf": "^2.6.2",
     "sinon": "^5.0.3",
@@ -51,6 +53,7 @@
     "tslint-config-airbnb": "^5.9.2",
     "tslint-config-prettier": "^1.14.0",
     "tslint-no-circular-imports": "^0.5.0",
+    "typedoc": "^0.13.0",
     "typescript": "^3.0.1"
   }
 }

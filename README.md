@@ -170,6 +170,11 @@ export class LockedGateMessageAction extends Action<Gate, GateState> {
 }
 ```
 
+## API Reference
+
+The full library reference is available in the `docs/` directory or published in https://nxtep-io.github.io/nano-fsm.
+
+
 ## License
 
 The project is licensed under the [MIT License](./LICENSE.md).
