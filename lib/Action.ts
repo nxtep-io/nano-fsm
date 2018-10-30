@@ -17,8 +17,8 @@ export type TransitionPayload<Payload> = {
 export type TransitionData<State, Payload = any> = TransitionBasicData<State> & TransitionPayload<Payload>;
 
 export default abstract class Action<Instance, State, Payload = any> {
-  public abstract from: State | State[] | string | string[];
-  public abstract to: State | State[] | string | string[];
+  public abstract from: State | string | (State | string)[];
+  public abstract to: State | string | (State | string)[];
   public name: string;
   protected logger;
 
