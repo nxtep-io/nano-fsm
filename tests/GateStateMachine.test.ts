@@ -41,12 +41,21 @@ describe("lib.samples.GateStateMachine", () => {
     await gate.goTo(GateState.OPENED);
     expect(gate.state).toBe(GateState.OPENED);
 
-    // Now, an invalid transition
-    await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/no action available/gi);
+    // Try to explode the gate - an invalid transition
+    await expect(gate.goTo(GateState.EXPLODED)).rejects.toThrow(/no action available/gi);
     expect(gate.state).toBe(GateState.OPENED);
 
-    // Another one, just for luck, and testing from and to as arrays
-    await expect(gate.goTo(GateState.EXPLODED)).rejects.toThrow(/no action available/gi);
+    // Close the gate!
+    await gate.goTo(GateState.CLOSED);
+    expect(gate.state).toBe(GateState.CLOSED);
+
+    // Explode the gate!
+    expect(await gate.goTo(GateState.EXPLODED)).toBe(true);
+    expect(gate.state).toBe(GateState.EXPLODED);
+
+    // Open the exploded gate! It makes no sense, but it's needed for full coverage
+    // Sorry for the lack of interesting story telling on a random finite state machine test
+    expect(await gate.goTo(GateState.OPENED)).toBe(true);
     expect(gate.state).toBe(GateState.OPENED);
   });
 
