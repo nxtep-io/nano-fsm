@@ -4,8 +4,8 @@ export interface ActionOptions {
     logger?: Logger;
 }
 export declare type TransitionBasicData<State> = {
-    from: State;
-    to: State;
+    from: State | State[];
+    to: State | State[];
 };
 export declare type TransitionPayload<Payload> = {
     [key in keyof Payload]: Payload[key];
@@ -13,8 +13,8 @@ export declare type TransitionPayload<Payload> = {
 export declare type TransitionData<State, Payload = any> = TransitionBasicData<State> & TransitionPayload<Payload>;
 export default abstract class Action<Instance, State, Payload = any> {
     protected options: ActionOptions;
-    abstract from: State | string;
-    abstract to: State | string;
+    abstract from: State | State[] | string | string[];
+    abstract to: State | State[] | string | string[];
     name: string;
     protected logger: any;
     constructor(options?: ActionOptions);

@@ -53,6 +53,11 @@ export class LockGateAction extends Action<Gate, GateState> {
   from = GateState.CLOSED;
   to = GateState.LOCKED;
 }
+
+export class ExplodeGateAction extends Action<Gate, GateState> {
+  from = [GateState.CLOSED, GateState.LOCKED]; // Array of States also works!
+  to = GateState.EXPLODED;
+}
 ```
 
 For the unlocking mechanism, we need a password validation inside the transition.
@@ -100,10 +105,11 @@ export default class GateStateMachine extends FSM<Gate, GateState> {
 
   /* Sets the machine available actions */
   actions = [
-    new OpenGateAction(), 
-    new CloseGateAction(), 
-    new LockGateAction(), 
-    new UnlockGateAction()
+    new OpenGateAction(),
+    new CloseGateAction(),
+    new LockGateAction(),
+    new UnlockGateAction(),
+    new ExplodeGateAction(),
   ];
 }
 ```
@@ -173,6 +179,12 @@ export class LockedGateMessageAction extends Action<Gate, GateState> {
 ## API Reference
 
 The full library reference is available in the `docs/` directory or published in https://nxtep-io.github.io/nano-fsm.
+
+## Changelog
+
+* **v0.0.2**: Array of states in Action definition
+
+* **v0.0.1**: Initial version
 
 
 ## License
