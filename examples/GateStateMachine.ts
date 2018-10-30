@@ -9,6 +9,7 @@ export enum GateState {
   OPENED = "opened", // Gate is opened for travelers
   CLOSED = "closed", // Gate is closed but unlocked, it may be opened by travelers
   LOCKED = "locked", // Gate is closed and locked, cannot unlock without a password
+  EXPLODED = "exploded", // Gate is exploded and can't be acted upon anymore
 }
 
 export class OpenGateAction extends Action<Gate, GateState> {
@@ -54,6 +55,11 @@ export class LockedGateMessageAction extends Action<Gate, GateState, GatePayload
   }
 }
 
+export class ExplodeGateAction extends Action<Gate, GateState> {
+  from = [GateState.CLOSED, GateState.LOCKED];
+  to = GateState.EXPLODED;
+}
+
 export interface GatePayload {
   password?: string;
 }
@@ -67,6 +73,7 @@ export default class GateStateMachine extends FSM<Gate, GateState, GatePayload> 
     GateState.OPENED,
     GateState.CLOSED,
     GateState.LOCKED,
+    GateState.EXPLODED,
   ];
 
   /* Sets the machine available actions */
@@ -76,5 +83,6 @@ export default class GateStateMachine extends FSM<Gate, GateState, GatePayload> 
     new LockGateAction(),
     new UnlockGateAction(),
     new LockedGateMessageAction(),
+    new ExplodeGateAction(),
   ];
 }

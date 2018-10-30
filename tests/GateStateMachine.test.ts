@@ -17,12 +17,15 @@ describe("lib.samples.GateStateMachine", () => {
     expect(gate.state).toBe(GateState.LOCKED);
     await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/already in \"locked\" state/gi);
 
-    // Should enable go to OPEN, but never accomplish.
+    // Should be able to go to OPEN, but never accomplish.
     expect(gate.canGoTo(GateState.OPENED)).toBe(true);
     expect(await gate.goTo(GateState.OPENED)).toBe(false);
 
     // Should not go to current state either
     expect(gate.canGoTo(GateState.LOCKED)).toBe(false);
+
+    // Should be able to move to a state where the from and to are defined as arrays
+    expect(gate.canGoTo(GateState.EXPLODED)).toBe(true);
   });
 
   it("should transition to a valid state with a valid payload", async () => {
@@ -40,6 +43,10 @@ describe("lib.samples.GateStateMachine", () => {
 
     // Now, an invalid transition
     await expect(gate.goTo(GateState.LOCKED)).rejects.toThrow(/no action available/gi);
+    expect(gate.state).toBe(GateState.OPENED);
+
+    // Another one, just for luck, and testing from and to as arrays
+    await expect(gate.goTo(GateState.EXPLODED)).rejects.toThrow(/no action available/gi);
     expect(gate.state).toBe(GateState.OPENED);
   });
 
