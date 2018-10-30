@@ -53,6 +53,11 @@ export class LockGateAction extends Action<Gate, GateState> {
   from = GateState.CLOSED;
   to = GateState.LOCKED;
 }
+
+export class ExplodeGateAction extends Action<Gate, GateState> {
+  from = [GateState.CLOSED, GateState.LOCKED];
+  to = GateState.EXPLODED;
+}
 ```
 
 For the unlocking mechanism, we need a password validation inside the transition.
@@ -100,10 +105,11 @@ export default class GateStateMachine extends FSM<Gate, GateState> {
 
   /* Sets the machine available actions */
   actions = [
-    new OpenGateAction(), 
-    new CloseGateAction(), 
-    new LockGateAction(), 
-    new UnlockGateAction()
+    new OpenGateAction(),
+    new CloseGateAction(),
+    new LockGateAction(),
+    new UnlockGateAction(),
+    new ExplodeGateAction(),
   ];
 }
 ```
