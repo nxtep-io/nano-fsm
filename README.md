@@ -55,7 +55,7 @@ export class LockGateAction extends Action<Gate, GateState> {
 }
 
 export class ExplodeGateAction extends Action<Gate, GateState> {
-  from = [GateState.CLOSED, GateState.LOCKED];
+  from = [GateState.CLOSED, GateState.LOCKED]; // Array of States also works!
   to = GateState.EXPLODED;
 }
 ```
@@ -179,6 +179,12 @@ export class LockedGateMessageAction extends Action<Gate, GateState> {
 ## API Reference
 
 The full library reference is available in the `docs/` directory or published in https://nxtep-io.github.io/nano-fsm.
+
+## Changelog
+
+* **v0.0.2**: Array of states in Action definition
+
+* **v0.0.1**: Initial version
 
 
 ## License
