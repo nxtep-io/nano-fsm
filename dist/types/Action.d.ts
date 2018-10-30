@@ -4,8 +4,8 @@ export interface ActionOptions {
     logger?: Logger;
 }
 export declare type TransitionBasicData<State> = {
-    from: State;
-    to: State;
+    from: State | State[];
+    to: State | State[];
 };
 export declare type TransitionPayload<Payload> = {
     [key in keyof Payload]: Payload[key];
