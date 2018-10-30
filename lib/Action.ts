@@ -6,8 +6,8 @@ export interface ActionOptions {
 }
 
 export type TransitionBasicData<State> = {
-  from: State;
-  to: State;
+  from: State | State[];
+  to: State | State[];
 }
 
 export type TransitionPayload<Payload> = {
@@ -17,8 +17,8 @@ export type TransitionPayload<Payload> = {
 export type TransitionData<State, Payload = any> = TransitionBasicData<State> & TransitionPayload<Payload>;
 
 export default abstract class Action<Instance, State, Payload = any> {
-  public abstract from: State | string;
-  public abstract to: State | string;
+  public abstract from: State | State[] | string | string[];
+  public abstract to: State | State[] | string | string[];
   public name: string;
   protected logger;
 
@@ -62,8 +62,23 @@ export default abstract class Action<Instance, State, Payload = any> {
    * @param to The destination state to be checked against.
    */
   public matches(from: "*" | State, to: "*" | State): boolean {
-    const matchesFrom = this.from === "*" || this.from === from;
-    const matchesTo = this.to === "*" || this.to === to;
+    let matchesFrom: boolean = false;
+    if (this.from === "*") {
+      matchesFrom = true;
+    } else if (Array.isArray(this.from)) {
+      matchesFrom = this.from.some(state => state === from);
+    } else {
+      matchesFrom = this.from === from;
+    }
+    let matchesTo: boolean = false;
+    if (this.to === "*") {
+      matchesTo = true;
+    } else if (Array.isArray(this.to)) {
+      matchesTo = this.to.some(state => state === to);
+    } else {
+      matchesTo = this.to === to;
+    }
+
     return matchesFrom && matchesTo;
   }
 }
