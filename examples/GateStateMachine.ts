@@ -57,7 +57,12 @@ export class LockedGateMessageAction extends Action<Gate, GateState, GatePayload
 
 export class ExplodeGateAction extends Action<Gate, GateState> {
   from = [GateState.CLOSED, GateState.LOCKED];
-  to = GateState.EXPLODED;
+  to = [GateState.EXPLODED];
+}
+
+export class AlreadyExplodedGateAction extends Action<Gate, GateState> {
+  from = [GateState.EXPLODED];
+  to = '*';
 }
 
 export interface GatePayload {
@@ -84,5 +89,6 @@ export default class GateStateMachine extends FSM<Gate, GateState, GatePayload> 
     new UnlockGateAction(),
     new LockedGateMessageAction(),
     new ExplodeGateAction(),
+    new AlreadyExplodedGateAction(),
   ];
 }

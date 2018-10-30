@@ -66,7 +66,8 @@ export default abstract class Action<Instance, State, Payload = any> {
     if (this.from === "*") {
       matchesFrom = true;
     } else if (Array.isArray(this.from)) {
-      matchesFrom = this.from.some(state => state === from);
+      const array = this.from as State[];
+      matchesFrom = array.some(state => state === from);
     } else {
       matchesFrom = this.from === from;
     }
@@ -74,7 +75,8 @@ export default abstract class Action<Instance, State, Payload = any> {
     if (this.to === "*") {
       matchesTo = true;
     } else if (Array.isArray(this.to)) {
-      matchesTo = this.to.some(state => state === to);
+      const array = this.to as State[];
+      matchesTo = array.some(state => state === to);
     } else {
       matchesTo = this.to === to;
     }
