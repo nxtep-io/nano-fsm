@@ -1,6 +1,7 @@
 import { Logger } from "ts-framework-common";
 import Action from "./Action";
 export interface FSMOptions<State> {
+    name?: string;
     state?: State;
     logger?: Logger;
     allowSameState?: boolean;
@@ -11,6 +12,7 @@ export interface FSMOptions<State> {
 export default abstract class FSM<Instance, State, Payload = any> {
     instance: Instance;
     protected options: FSMOptions<State>;
+    name: string;
     protected abstract actions: Action<Instance, State, Payload>[];
     protected abstract initialState: State;
     protected abstract states: State[];
@@ -28,6 +30,20 @@ export default abstract class FSM<Instance, State, Payload = any> {
      */
     readonly state: State;
     /**
+     * Handles a state transition preparation
+     */
+    beforeTransition(from: State | (State | string)[], to: State): void;
+    /**
+     * Handles a state transition
+     *
+     * @param data The transition payload passed to the fsm.goTo() method.
+     */
+    onTransition(from: State | (State | string)[], to: State, data: Payload): Promise<boolean>;
+    /**
+     * Handles post transition results.
+     */
+    afterTransition(from: State | (State | string)[], to: State): void;
+    /**
      * Gets all available actions to go to a determined state.
      *
      * @param to The desired state
@@ -44,7 +60,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
      *
      * @param to The destination state
      */
-    protected setState(to: State, actions: Action<Instance, State>[]): Promise<void>;
+    protected setState(from: State | (State | string)[], to: State, actions: Action<Instance, State>[]): Promise<void>;
     /**
      * Performs a new transition in the machine.
      *

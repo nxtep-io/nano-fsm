@@ -13,8 +13,8 @@ export declare type TransitionPayload<Payload> = {
 export declare type TransitionData<State, Payload = any> = TransitionBasicData<State> & TransitionPayload<Payload>;
 export default abstract class Action<Instance, State, Payload = any> {
     protected options: ActionOptions;
-    abstract from: State | State[] | string | string[];
-    abstract to: State | State[] | string | string[];
+    abstract from: State | string | (State | string)[];
+    abstract to: State | string | (State | string)[];
     name: string;
     protected logger: any;
     constructor(options?: ActionOptions);

@@ -13,6 +13,19 @@ yarn add "nxtep-io/nano-fsm#master";
 npm install "github:nxtep-io/nano-fsm#master";
 ```
 
+## Lifecycle
+
+To allow a higher degree of control over your state transitions, every action and state machine has a lifecycle you can use to meet your needs.  
+The lifecycle is run as follows:
+- `Action.beforeTransition` (In parallel)
+- `FiniteStateMachine.beforeTransition`
+- `Action.onTransition` (In parallel)
+- `FiniteStateMachine.onTransition`
+- `Action.afterTransition` (In parallel)
+- `FiniteStateMachine.afterTransition`
+
+You can access the instance in the state machine lifecycle in `this.instance`
+
 ## Example: A simple Gate fsm
 
 Let's define a Gate, with a simple unlocking password and 3 states: `opened`, `closed` and `locked`.
