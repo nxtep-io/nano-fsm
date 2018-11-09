@@ -53,10 +53,9 @@ describe("lib.samples.GateStateMachine", () => {
     expect(await gate.goTo(GateState.EXPLODED)).toBe(true);
     expect(gate.state).toBe(GateState.EXPLODED);
 
-    // Open the exploded gate! It makes no sense, but it's needed for full coverage
-    // Sorry for the lack of interesting story telling on a random finite state machine test
-    expect(await gate.goTo(GateState.OPENED)).toBe(true);
-    expect(gate.state).toBe(GateState.OPENED);
+    // Try to open the exploded gate, it will not work.
+    await expect(gate.goTo(GateState.OPENED)).rejects.toThrow(/gate has been exploded/gi);
+    expect(gate.state).toBe(GateState.EXPLODED);
   });
 
   it("should not transition to a valid state without a valid payload", async () => {

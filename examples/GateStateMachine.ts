@@ -61,8 +61,12 @@ export class ExplodeGateAction extends Action<Gate, GateState> {
 }
 
 export class AlreadyExplodedGateAction extends Action<Gate, GateState> {
-  from = [GateState.EXPLODED];
+  from = GateState.EXPLODED;
   to = '*';
+
+  async onTransition(instance: Gate, data: TransitionData<GateState, GatePayload>): Promise<boolean> {
+    throw new Error('Gate has been exploded, nothing left to do with it');
+  }
 }
 
 export interface GatePayload {
@@ -91,4 +95,8 @@ export default class GateStateMachine extends FSM<Gate, GateState, GatePayload> 
     new ExplodeGateAction(),
     new AlreadyExplodedGateAction(),
   ];
+
+  async beforeTransition(from, to, data) {
+    super.beforeTransition(from, to, data)
+  }
 }

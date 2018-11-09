@@ -1,5 +1,5 @@
 import { Logger } from "ts-framework-common";
-import Action, { TransitionData } from "./Action";
+import Action from "./Action";
 
 export interface FSMOptions<State> {
   name?: string;
@@ -57,7 +57,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
    * Handles a state transition preparation
    */
   public beforeTransition(from: State | (State | string)[], to: State, data: Payload): void {
-    this.logger.silly(`${this.name}: leaving states "${Array.isArray(from) ? from.join(`", "`) : from}"`, { data });
+    this.logger.silly(`${this.name}: leaving state(s) "${Array.isArray(from) ? from.join(`", "`) : from}"`, { data });
   }
 
   /**
@@ -145,7 +145,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
     const actions = this.pathsTo(to);
 
     if (actions) {
-      const froms = actions.reduce(
+      const froms = actions.length ? actions.reduce(
         (states, action) => {
           if (Array.isArray(action.from)) {
             (action.from as State[]).forEach(state => states.push(state));
@@ -156,7 +156,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
           return states;
         },
         [] as (State | string)[]
-      );
+      ) : this.state;
 
       // Notify we're leaving the current state
       await Promise.all(actions.map(action => action.beforeTransition(this.instance)));
