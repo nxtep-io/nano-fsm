@@ -32,7 +32,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
     /**
      * Handles a state transition preparation
      */
-    beforeTransition(from: State | (State | string)[], to: State): void;
+    beforeTransition(from: State | (State | string)[], to: State, data: Payload): void;
     /**
      * Handles a state transition
      *
@@ -42,7 +42,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
     /**
      * Handles post transition results.
      */
-    afterTransition(from: State | (State | string)[], to: State): void;
+    afterTransition(from: State | (State | string)[], to: State, data: Payload): void;
     /**
      * Gets all available actions to go to a determined state.
      *
@@ -60,7 +60,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
      *
      * @param to The destination state
      */
-    protected setState(from: State | (State | string)[], to: State, actions: Action<Instance, State>[]): Promise<void>;
+    protected setState(to: State): Promise<void>;
     /**
      * Performs a new transition in the machine.
      *

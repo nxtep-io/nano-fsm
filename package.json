@@ -1,6 +1,6 @@
 {
   "name": "nano-fsm",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A minimalistic finite state machine for TS",
   "author": "Luis Brito <luis@nxtep.io>",
   "license": "MIT",
@@ -48,7 +48,7 @@
     "rimraf": "^2.6.2",
     "sinon": "^5.0.3",
     "ts-jest": "^23.1.2",
-    "ts-node": "^7.0.0",
+    "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.9.2",
     "tslint-config-prettier": "^1.14.0",

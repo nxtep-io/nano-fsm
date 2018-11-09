@@ -63,13 +63,8 @@ export class CloseGateAction extends Action<Gate, GateState> {
 }
 
 export class LockGateAction extends Action<Gate, GateState> {
-  from = GateState.CLOSED;
+  from = [GateState.CLOSED]; // Array of States also works!
   to = GateState.LOCKED;
-}
-
-export class ExplodeGateAction extends Action<Gate, GateState> {
-  from = [GateState.CLOSED, GateState.LOCKED]; // Array of States also works!
-  to = GateState.EXPLODED;
 }
 ```
 
@@ -122,7 +117,6 @@ export default class GateStateMachine extends FSM<Gate, GateState> {
     new CloseGateAction(),
     new LockGateAction(),
     new UnlockGateAction(),
-    new ExplodeGateAction(),
   ];
 }
 ```

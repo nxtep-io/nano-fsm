@@ -1,5 +1,5 @@
 import { Logger } from "ts-framework-common";
-import Action, { TransitionData } from "./Action";
+import Action from "./Action";
 
 export interface FSMOptions<State> {
   name?: string;
@@ -56,8 +56,8 @@ export default abstract class FSM<Instance, State, Payload = any> {
   /**
    * Handles a state transition preparation
    */
-  public beforeTransition(from: State | (State | string)[], to: State): void {
-    this.logger.silly(`${this.name}: leaving states "${Array.isArray(from) ? from.join(`", "`) : from}"`);
+  public beforeTransition(from: State | (State | string)[], to: State, data: Payload): void {
+    this.logger.silly(`${this.name}: leaving state(s) "${Array.isArray(from) ? from.join(`", "`) : from}"`, { data });
   }
 
   /**
@@ -76,8 +76,8 @@ export default abstract class FSM<Instance, State, Payload = any> {
   /**
    * Handles post transition results.
    */
-  public afterTransition(from: State | (State | string)[], to: State): void {
-    this.logger.silly(`${this.name}: entering "${to}"`);
+  public afterTransition(from: State | (State | string)[], to: State, data: Payload): void {
+    this.logger.silly(`${this.name}: entering "${to}"`, { data });
   }
 
   /**
@@ -118,17 +118,9 @@ export default abstract class FSM<Instance, State, Payload = any> {
    *
    * @param to The destination state
    */
-  protected async setState(
-    from: State | (State | string)[],
-    to: State,
-    actions: Action<Instance, State>[]
-  ): Promise<void> {
+  protected async setState(to: State): Promise<void> {
     // Set the next state locally
     this._state = to;
-
-    // Notify we're entered the next state
-    await Promise.all(actions.map(action => action.afterTransition(this.instance)));
-    await this.afterTransition(from, to);
   }
 
   /**
@@ -142,9 +134,6 @@ export default abstract class FSM<Instance, State, Payload = any> {
 
     if (to === state && !this.options.allowSameState) {
       throw new Error(`Machine is already in "${state}" state`);
-    } else if (to === state) {
-      await this.setState(state, to, []);
-      return true;
     }
 
     // Ensure state is valid
@@ -156,7 +145,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
     const actions = this.pathsTo(to);
 
     if (actions) {
-      const froms = actions.reduce(
+      const froms = actions.length ? actions.reduce(
         (states, action) => {
           if (Array.isArray(action.from)) {
             (action.from as State[]).forEach(state => states.push(state));
@@ -167,13 +156,13 @@ export default abstract class FSM<Instance, State, Payload = any> {
           return states;
         },
         [] as (State | string)[]
-      );
+      ) : this.state;
 
       // Notify we're leaving the current state
       await Promise.all(actions.map(action => action.beforeTransition(this.instance)));
 
       // Run own beforeTranstion
-      await this.beforeTransition(froms, to);
+      await this.beforeTransition(froms, to, data);
 
       // TODO: Run this is series
       // Check if we can transition to the next state
@@ -186,7 +175,12 @@ export default abstract class FSM<Instance, State, Payload = any> {
       const ok = results.reduce((aggr, next) => aggr && next, true);
 
       if (ok) {
-        await this.setState(froms, to, actions);
+        await this.setState(to);
+
+        // Notify we're entered the next state
+        await Promise.all(actions.map(action => action.afterTransition(this.instance)));
+
+        await this.afterTransition(froms, to, data);
 
         return true;
       }

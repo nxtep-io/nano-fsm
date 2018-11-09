@@ -5,23 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Debug Jest Tests",
       "type": "node",
       "request": "launch",
-      "name": "Debug Tests",
-      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "cwd": "${workspaceRoot}",
-      "sourceMaps": true,
-      "args": [
-        "--config",
-        "jest.json",
-        "-i"
+      "runtimeExecutable": "node",
+      "port": 9229,
+      "runtimeArgs": [
+        "--require",
+        "ts-node/register",
+        "--inspect=9229",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand",
+        "--config=jest.json"
       ],
-      "env": {
-        "NODE_ENV": "test",
-        "PORT": 3000
-      },
-      "internalConsoleOptions": "openOnFirstSessionStart",
-      "console": "integratedTerminal"
-    }
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+    },
   ]
 }
