@@ -1,7 +1,7 @@
-import { Logger } from "ts-framework-common";
+import { LoggerInstance } from "ts-framework-common";
 export interface ActionOptions {
     name?: string;
-    logger?: Logger;
+    logger?: LoggerInstance;
 }
 export declare type TransitionBasicData<State> = {
     from: State | State[];

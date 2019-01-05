@@ -1,9 +1,9 @@
-import { Logger } from "ts-framework-common";
+import { LoggerInstance } from "ts-framework-common";
 import Action from "./Action";
 export interface FSMOptions<State> {
     name?: string;
     state?: State;
-    logger?: Logger;
+    logger?: LoggerInstance;
     allowSameState?: boolean;
 }
 /**
@@ -16,7 +16,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
     protected abstract actions: Action<Instance, State, Payload>[];
     protected abstract initialState: State;
     protected abstract states: State[];
-    protected logger: Logger;
+    protected logger: LoggerInstance;
     protected _state: State;
     constructor(instance: Instance, options?: FSMOptions<State>);
     /**
