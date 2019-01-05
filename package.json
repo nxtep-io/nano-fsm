@@ -35,7 +35,7 @@
     ]
   },
   "dependencies": {
-    "ts-framework-common": "nxtep-io/ts-framework-common#v2"
+    "ts-framework-common": "nxtep-io/ts-framework-common#2.3.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
