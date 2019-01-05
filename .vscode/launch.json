@@ -10,11 +10,11 @@
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "node",
-      "port": 9228,
+      "port": 9229,
       "runtimeArgs": [
         "--require",
         "ts-node/register",
-        "--inspect=9228",
+        "--inspect=9229",
         "${workspaceRoot}/node_modules/.bin/jest",
         "--runInBand",
         "--config=jest.json"
