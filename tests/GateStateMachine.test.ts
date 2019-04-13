@@ -1,7 +1,9 @@
 import { GateStateMachine, GateState } from "../examples";
+import { Logger } from "nano-errors";
 
 describe("lib.samples.GateStateMachine", () => {
   let gate;
+  Logger.initialize();
 
   beforeEach(async () => {
     gate = new GateStateMachine({

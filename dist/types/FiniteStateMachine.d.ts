@@ -1,4 +1,4 @@
-import { LoggerInstance } from "ts-framework-common";
+import { LoggerInstance } from "nano-errors";
 import Action from "./Action";
 export interface FSMOptions<State> {
     name?: string;

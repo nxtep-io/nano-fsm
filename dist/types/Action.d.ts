@@ -1,4 +1,4 @@
-import { LoggerInstance } from "ts-framework-common";
+import { LoggerInstance } from "nano-errors";
 export interface ActionOptions {
     name?: string;
     logger?: LoggerInstance;
