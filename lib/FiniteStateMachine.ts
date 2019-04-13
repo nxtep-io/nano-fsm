@@ -21,7 +21,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
 
   constructor(public instance: Instance, protected options: FSMOptions<State> = {}) {
     this.name = options.name || this.name || this.constructor.name;
-    this.logger = options.logger || Logger.getInstance();
+    this.logger = options.logger || Logger.initialize();
   }
 
   /**

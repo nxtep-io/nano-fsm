@@ -24,7 +24,7 @@ export default abstract class Action<Instance, State, Payload = any> {
 
   constructor(protected options: ActionOptions = {}) {
     this.name = options.name || this.name || this.constructor.name;
-    this.logger = options.logger || Logger.getInstance();
+    this.logger = options.logger || Logger.initialize();
   }
 
   /**
