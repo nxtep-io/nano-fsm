@@ -1,8 +1,8 @@
-import { Logger } from "ts-framework-common";
+import { Logger, LoggerInstance } from "nano-errors";
 
 export interface ActionOptions {
   name?: string;
-  logger?: Logger;
+  logger?: LoggerInstance;
 }
 
 export type TransitionBasicData<State> = {
@@ -20,11 +20,11 @@ export default abstract class Action<Instance, State, Payload = any> {
   public abstract from: State | string | (State | string)[];
   public abstract to: State | string | (State | string)[];
   public name: string;
-  protected logger;
+  protected logger: LoggerInstance;
 
   constructor(protected options: ActionOptions = {}) {
     this.name = options.name || this.name || this.constructor.name;
-    this.logger = options.logger || new Logger();
+    this.logger = options.logger || Logger.getInstance();
   }
 
   /**

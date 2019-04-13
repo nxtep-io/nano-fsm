@@ -1,7 +1,7 @@
-import { Logger } from "ts-framework-common";
+import { LoggerInstance } from "nano-errors";
 export interface ActionOptions {
     name?: string;
-    logger?: Logger;
+    logger?: LoggerInstance;
 }
 export declare type TransitionBasicData<State> = {
     from: State | State[];
@@ -16,7 +16,7 @@ export default abstract class Action<Instance, State, Payload = any> {
     abstract from: State | string | (State | string)[];
     abstract to: State | string | (State | string)[];
     name: string;
-    protected logger: any;
+    protected logger: LoggerInstance;
     constructor(options?: ActionOptions);
     /**
      *
