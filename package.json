@@ -1,6 +1,6 @@
 {
   "name": "nano-fsm",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A minimalistic finite state machine for TS",
   "author": "Luis Brito <luis@nxtep.io>",
   "license": "MIT",
@@ -35,7 +35,7 @@
     ]
   },
   "dependencies": {
-    "nano-errors": "nxtep-io/nano-errors#master"
+    "nano-errors": "nxtep-io/nano-errors#1.1.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
