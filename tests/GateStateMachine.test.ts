@@ -74,6 +74,11 @@ describe("lib.samples.GateStateMachine", () => {
     expect(gate.goTo("unknonwn")).rejects.toThrow(/Invalid state/gi);
   });
 
+  it("render DOT graph from fsm", () => {
+    console.log(gate.toDot());
+    expect(true).toBe(true);
+  });
+
   describe("allow same state", async () => {
     let gate;
 

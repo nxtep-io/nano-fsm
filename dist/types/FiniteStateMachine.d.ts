@@ -68,4 +68,7 @@ export default abstract class FSM<Instance, State, Payload = any> {
      * @param data An optional payload to be passed to the machine actions
      */
     goTo(to: State, data?: Payload): Promise<boolean>;
+    toDot(options?: {
+        name: string;
+    }): string;
 }
