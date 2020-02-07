@@ -145,18 +145,20 @@ export default abstract class FSM<Instance, State, Payload = any> {
     const actions = this.pathsTo(to);
 
     if (actions) {
-      const froms = actions.length ? actions.reduce(
-        (states, action) => {
-          if (Array.isArray(action.from)) {
-            (action.from as State[]).forEach(state => states.push(state));
-          } else {
-            states.push(action.from);
-          }
+      const froms = actions.length
+        ? actions.reduce(
+            (states, action) => {
+              if (Array.isArray(action.from)) {
+                (action.from as State[]).forEach(state => states.push(state));
+              } else {
+                states.push(action.from);
+              }
 
-          return states;
-        },
-        [] as (State | string)[]
-      ) : this.state;
+              return states;
+            },
+            [] as (State | string)[]
+          )
+        : this.state;
 
       // Notify we're leaving the current state
       await Promise.all(actions.map(action => action.beforeTransition(this.instance)));
@@ -191,5 +193,32 @@ export default abstract class FSM<Instance, State, Payload = any> {
     }
 
     return false;
+  }
+
+  toDot(options: { name: string } = { name: "graphname" }) {
+    const start = `digraph ${options.name} {\n`;
+
+    const body = this.states
+      .flatMap(state => {
+        const previousStates = this.pathsTo(state);
+        if (!previousStates) return [""];
+
+        return previousStates.map(previousState => {
+          let normalizedPreviousState = "";
+          if ((previousState.from = "*")) {
+            normalizedPreviousState = this.states.join(",");
+          } else {
+            normalizedPreviousState = previousState.from;
+          }
+
+          return `  ${normalizedPreviousState} -> ${state} [label=${previousState.name}];\n`;
+        });
+      })
+      .filter(s => !!s)
+      .join("");
+
+    const end = `}`;
+
+    return start + body + end;
   }
 }
