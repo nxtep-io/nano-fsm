@@ -10,11 +10,7 @@ export type TransitionBasicData<State> = {
   to: State | State[];
 }
 
-export type TransitionPayload<Payload> = {
-  [key in keyof Payload]: Payload[key];
-}
-
-export type TransitionData<State, Payload = any> = TransitionBasicData<State> & TransitionPayload<Payload>;
+export type TransitionData<State, Payload = any> = TransitionBasicData<State> & Payload;
 
 export default abstract class Action<Instance, State, Payload = any> {
   public abstract from: State | string | (State | string)[];
