@@ -1,6 +1,6 @@
 {
   "name": "nano-fsm",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A minimalistic finite state machine for TS",
   "author": "Luis Brito <luis@nxtep.io>",
   "license": "MIT",
