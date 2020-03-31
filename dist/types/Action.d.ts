@@ -7,10 +7,7 @@ export declare type TransitionBasicData<State> = {
     from: State | State[];
     to: State | State[];
 };
-export declare type TransitionPayload<Payload> = {
-    [key in keyof Payload]: Payload[key];
-};
-export declare type TransitionData<State, Payload = any> = TransitionBasicData<State> & TransitionPayload<Payload>;
+export declare type TransitionData<State, Payload = any> = TransitionBasicData<State> & Payload;
 export default abstract class Action<Instance, State, Payload = any> {
     protected options: ActionOptions;
     abstract from: State | string | (State | string)[];
